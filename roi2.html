@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+
+    <title>Roi Calculator</title>
+    <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+      input#robotCell {
+        width: 125px;
+        top: 0;
+        left: 0;
+      }
+     input[type='number']::-webkit-inner-spin-button, input[type='numer']::-webkit-outer-spin-button {
+       -webkit-appearance: none;
+       margin: 0;
+     }
+     input {
+       border: 1px solid grey;
+       border-radius: 5px;
+       text-align: center;
+     }
+     
+      input.t1 {
+        width: 85px;
+        
+        font-size: 20px;
+      }
+      input.t2 {
+        width: 100px;
+    
+        font-size: 20px;
+      }
+      input.t3 {
+        width: 110px;
+        
+        font-size: 20px;
+      }
+      
+      
+      .green {
+        background-color: #00ff00;
+      }
+
+      .blue {
+        background-color: #99ccff;
+      }
+      .black {
+        background-color: #000000;
+      }
+
+      .orange {
+        background-color: #f7921d;
+      }
+     
+
+    
+      th {
+        
+        background: #d3d3d3;
+        text-align: center;
+      }
+
+      body {
+        margin-top: 25p;
+        text-align: left;
+      }
+      .yellow {
+          background-color: yellow;
+      }
+      .div-1 {
+        margin-left: 10%;
+      }
+     
+      
+      
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 div-1">
+          <table class="table table-borderless">
+            <tr>
+              <th>Operation Parameters</th>
+              <th>Current</th>
+              <th>Robot System</th>
+            </tr>
+            <tr>
+              <td>Shifts per workday</td>
+              <td>
+                <input
+                  type="number"
+                  id="shift"
+                  value="2"
+                  onchange="operationUpdate()"
+                  class="blue t1"
+                />
+              </td>
+              <td>
+                <input
+                  type="number"
+                  id="robotShift"
+                  readonly="readonly"
+                  class="orange t1"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Hours per shift</td>
+              <td>
+                <input
+                  type="number"
+                  id="humanHours"
+                  value="8"
+                  onchange="operationUpdate()"
+                  class="blue t1"
+                />
+              </td>
+              <td>
+                <input
+                  type="number"
+                  id="robotHours"
+                  readonly="readonly"
+                  class="orange t1"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Workers per hour</td>
+              <td>
+                <input
+                  type="number"
+                  id="humanWorkers"
+                  value="3"
+                  onchange="operationUpdate()"
+                  class="blue t1"
+                />
+              </td>
+              <td>
+                <input
+                  type="number"
+                  id="robotWorkers"
+                  readonly="readonly"
+                  class="orange t1"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Working days per year</td>
+              <td>
+                <input
+                  type="number"
+                  id="humanDays"
+                  value="250"
+                  onchange="operationUpdate()"
+                  class="blue t1"
+                />
+              </td>
+              <td>
+                <input
+                  type="number"
+                  id="robotDays"
+                  readonly="readonly"
+                  class="orange t1"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Hourly Wage in ($)</td>
+              <td>
+                <input
+                  type="number"
+                  id="humanWage"
+                  value="24.50"
+                  onchange="operationUpdate()"
+                  class="blue t1"
+                />
+              </td>
+              <td>
+                <input
+                  type="number"
+                  id="robotWage"
+                  value="24.50"
+                  readonly="readonly"
+                  class="orange t1"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Benefit factor</td>
+              <td>
+                <input
+                  type="number"
+                  id="humanBenefits"
+                  value="0.30"
+                  step=".1"
+                  onchange="operationUpdate()"
+                  class="blue t1"
+                />
+              </td>
+              <td>
+                <input
+                  type="number"
+                  id="robotBenefits"
+                  value=".30"
+                  readonly="readonly"
+                  class="orange t1"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Cycle time</td>
+              <td>
+                <input
+                  type="number"
+                  id="humanCycle"
+                  value="10.00"
+                  onchange="operationUpdate()"
+                  class="blue t1"
+                />
+              </td>
+              <td>
+                <input
+                  type="number"
+                  id="robotCycle"
+                  value="10.00"
+                  readonly="readonly"
+                  class="orange t1"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Load / Unload time (sec)</td>
+              <td>
+                <input
+                  type="number"
+                  id="humanLoad"
+                  value="10.00"
+                  onchange="operationUpdate()"
+                  class="blue t1"
+                />
+              </td>
+              <td>
+                <input
+                  type="number"
+                  id="robotLoad"
+                  value="8.00"
+                  readonly="readonly"
+                  class="orange t1"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Operation efficiency (%)</td>
+              <td>
+                <input
+                  type="number"
+                  id="humanEfficiency"
+                  value="0.75"
+                  onchange="operationUpdate()"
+                  class="blue t1"
+                />
+              </td>
+              <td>
+                <input
+                  type="number"
+                  id="robotEfficiency"
+                  value="0.90"
+                  readonly="readonly"
+                  class="orange t1"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Cost of robot cell</td>
+              <td><input type="number" id="humanCell" class="black t1" /></td>
+              <td>
+                <input
+                  type="number"
+                  id="robotCell"
+                  readonly="readonly"
+                  value="90000"
+                  class="orange t1"
+                />
+              </td>
+            </tr>
+          </table>
+          <p class="blue">Populate the Blue cells with your current methodology</p>
+          <p class="yellow">Note: A standard robotic application efficiency is 90% and an average cost of a robot cell is $90,000.</p>
+        </div>
+        <!-- end table 1 -->
+
+        <!-- start table 2 -->
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3">
+          <table class="table table-borderless">
+            <tr>
+              <th colspan="2">Return on Investment (ROI) Results</th>
+            </tr>
+
+            <tr>
+              <td>Labor savings only (Months)</td>
+              <td>
+                <input
+                  type="number"
+                  id="laborSavings"
+                  class="green t2"
+                  readonly="readonly"
+                  
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Additional profit only (months)</td>
+              <td>
+                <input
+                  type="number"
+                  id="additionalProfit"
+                  class="green t2"
+                  readonly="readonly"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Increase in parts per year</td>
+              <td>
+                <input
+                  type="number"
+                  id="increasedPartsPerYear"
+                  readonly="readonly"
+                  class="t2"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Product increase (%)</td>
+              <td>
+                <input type="number" id="prodcutIncrease" readonly="readonly" class="t2"/>
+              </td>
+            </tr>
+            <tr>
+              <td>Decrease in part cost (per part)</td>
+              <td>
+                <input
+                  type="number"
+                  id="decreasePartCost"
+                  readonly="readonly"
+                  class="t2"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Part cost decrease (%)</td>
+              <td>
+                <input
+                  type="number"
+                  id="partCostDecrease"
+                  readonly="readonly"
+                  class="t2"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Addional theorectical profit</td>
+              <td>
+                <input
+                  type="number"
+                  id="additionalTheoryProfit"
+                  readonly="readonly"
+                  class="t2"
+                />
+              </td>
+            </tr>
+          </table>
+          
+        </div>
+        <!-- End Table 2-->
+
+        <!-- Start Table 3 -->
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3">
+          <table class="table table-borderless">
+            <tr>
+              <th>Operation Statistics</th>
+              <th>Current System</th>
+              <th>Robotic System</th>
+            </tr>
+            <tr>
+              <td>Labor hours per year</td>
+              <td>
+                <input type="number" id="humanLaborHours" readonly="readonly" class="t3" />
+              </td>
+              <td>
+                <input type="number" id="robotLaborHours" readonly="readonly" class="t3" />
+              </td>
+            </tr>
+            <tr>
+              <td>Labor cost per year</td>
+              <td>
+                <input type="number" id="humanLaborCost" readonly="readonly" class="t3" />
+              </td>
+              <td>
+                <input type="number" id="robotLaborCost" readonly="readonly" class="t3" />
+              </td>
+            </tr>
+            <tr>
+              <td>Parts per hour</td>
+              <td><input type="number" id="humanPartsHour" class="t3" /></td>
+              <td>
+                <input type="number" id="robotPartsHour" readonly="readonly"class="t3" />
+              </td>
+            </tr>
+            <tr>
+              <td>Parts per year</td>
+              <td>
+                <input type="number" id="humanPartsYear" readonly="readonly" class="t3" />
+              </td>
+              <td>
+                <input type="number" id="robotPartsYear" readonly="readonly" class="t3" />
+              </td>
+            </tr>
+            <tr>
+              <td>Labor cost per part</td>
+              <td>
+                <input type="number" id="humanCostPart" readonly="readonly" class="t3" />
+              </td>
+              <td>
+                <input type="number" id="robotCostPart" readonly="readonly" class="t3" />
+              </td>
+            </tr>
+            <tr>
+              <td>Total hourly cost</td>
+              <td><input type="number" id="humanTotalCost" value="31.85" class="t3" /></td>
+              <td><input type="number" id="robotTotalCost" value="31.85" class="t3" /></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <script>
+      let shift,
+        robotShift,
+        decreasePartCost,
+        humanWorkers,
+        robotWorkers,
+        humanDays,
+        robotDays,
+        humanWage,
+        robotWage,
+        humanBenefits,
+        robotBenefits,
+        humanCycle,
+        robotCycle,
+        humanLoad,
+        robotLoad,
+        humanEfficiency,
+        robotEfficiency,
+        humanCell,
+        robotCell,
+        humanLaborHours,
+        robotLaborHours,
+        humanLaborCost,
+        robotLaborCost,
+        humanTotalCost,
+        robotTotalCost,
+        humanPartsHour,
+        robotPartsHour,
+        humanPartsYear,
+        robotPartsYear,
+        laborSavings,
+        additionalTheoryProfit,
+        additionalProfit,
+        humanCostPart,
+        robotCostPart;
+
+      function operationUpdate() {
+        function shifts() {
+          shift = document.getElementById("shift").value;
+          shift = parseInt(shift);
+          robotShift = document.getElementById("robotShift").value = shift;
+          robotShift = parseInt(robotShift);
+          // console.log(typeof shift + " " + typeof robotShift)
+        }
+        shifts();
+
+        function hours() {
+          humanHours = document.getElementById("humanHours").value;
+          humanHours = parseInt(humanHours);
+          robotHours = document.getElementById("robotHours").value = humanHours;
+          robotHours = parseInt(robotHours);
+          // console.log(typeof humanHours + " " + robotHours)
+        }
+        hours();
+
+        function workingHours() {
+          humanWorkers = document.getElementById("humanWorkers").value;
+          humanWorkers = parseInt(humanWorkers);
+          robotWorkers = document.getElementById("robotWorkers").value =
+            humanWorkers / 4;
+          // console.log(robotWorkers)
+        }
+        workingHours();
+
+        function workingDays() {
+          humanDays = document.getElementById("humanDays").value;
+          humanDays = parseInt(humanDays);
+          robotDays = document.getElementById("robotDays").value = humanDays;
+          //    console.log(robotDays)
+        }
+        workingDays();
+
+        function hourlyWage() {
+          humanWage = document.getElementById("humanWage").value;
+          humanWage = parseFloat(humanWage);
+          robotWage = document.getElementById("robotWage").value;
+          robotWage = parseFloat(robotWage);
+          document.getElementById("robotWage").value = (humanWage).toFixed(2);
+          // console.log(typeof humanWage + ' ' + typeof robotWage)
+        }
+        hourlyWage();
+
+        function benefits() {
+          humanBenefits = document.getElementById("humanBenefits").value;
+          humanBenefits = parseFloat(humanBenefits);
+          robotBenefits = document.getElementById("robotBenefits").value;
+          robotBenefits = parseFloat(robotBenefits);
+          document.getElementById("robotBenefits").value = (humanBenefits).toFixed(2);
+          // console.log(typeof humanBenefits + ' ' + typeof robotBenefits)
+        }
+        benefits();
+
+        function cycleTime() {
+          humanCycle = document.getElementById("humanCycle").value;
+          humanCycle = parseFloat(humanCycle);
+
+          robotCycle = document.getElementById("robotCycle").value;
+          robotCycle = parseFloat(robotCycle);
+          // console.log(humanCycle)
+        }
+        cycleTime();
+
+        function loadTime() {
+          humanLoad = document.getElementById("humanLoad").value;
+          humanLoad = parseFloat(humanLoad);
+          robotLoad = document.getElementById("robotLoad").value;
+          robotLoad = parseFloat(robotLoad);
+          // console.log(typeof humanLoad + ' ' + typeof robotLoad)
+        }
+        loadTime();
+
+        function efficiencyRate() {
+          humanEfficiency = document.getElementById("humanEfficiency").value;
+          humanEfficiency = parseFloat(humanEfficiency);
+          robotEfficiency = document.getElementById("robotEfficiency").value;
+          robotEfficiency = parseFloat(robotEfficiency);
+          // console.log(typeof humanEfficiency + ' ' + typeof robotEfficiency)
+        }
+        efficiencyRate();
+
+        function robotCost() {
+          humanCell = document.getElementById("humanCell").value;
+          humanCell = parseInt(humanCell);
+          robotCell = document.getElementById("robotCell").value;
+          robotCell = parseInt(robotCell);
+          // console.log(robotCell)
+        }
+        robotCost();
+
+        function totalCost() {
+          var hour, robotHour;
+          hour = humanWage * (1 * humanBenefits) + humanWage;
+          humanTotalCost = document.getElementById(
+            "humanTotalCost"
+          ).value = hour;
+          robotTotalCost = document.getElementById(
+            "robotTotalCost"
+          ).value = hour;
+        }
+        totalCost();
+
+        function laborHours() {
+          var hours, botHours;
+          hours = shift * humanWorkers * humanHours * humanDays;
+          botHours = robotShift * robotWorkers * robotHours * robotDays;
+          humanLaborHours = document.getElementById(
+            "humanLaborHours"
+          ).value = hours;
+          robotLaborHours = document.getElementById(
+            "robotLaborHours"
+          ).value = botHours;
+        }
+        laborHours();
+
+        function yearlyLaborCost() {
+          humanLaborCost = document.getElementById("humanLaborCost").value = (
+            humanTotalCost * humanLaborHours
+          ).toFixed(0);
+          robotLaborCost = document.getElementById("robotLaborCost").value = (
+            robotTotalCost * robotLaborHours
+          ).toFixed(0);
+          //    console.log(robotTotalCost * robotLaborHours)
+        }
+        yearlyLaborCost();
+
+        function laborSavingMonths() {
+          laborSavings = document.getElementById("laborSavings").value = (
+            (robotCell / (humanLaborCost - robotLaborCost)) *
+            12
+          ).toFixed(2);
+          // console.log(robotCell / (humanLaborCost - robotLaborCost)*12)
+        }
+        laborSavingMonths();
+
+        function partsPerYear() {
+          humanPartsYear = document.getElementById("humanPartsYear").value =
+            ((3600 * humanDays * humanHours * shift) /
+              (humanCycle + humanLoad)) *
+            humanEfficiency;
+          robotPartsYear = document.getElementById("robotPartsYear").value =
+            ((3600 * robotDays * robotHours * robotShift) /
+              (robotCycle + robotLoad)) *
+            robotEfficiency;
+          // console.log((3600 * humanDays * humanHours * shift)/(humanCycle + humanLoad) * humanEfficiency)
+          // console.log(humanPartsYear)
+        }
+        partsPerYear();
+
+        function laborCostPart() {
+          humanCostPart = document.getElementById("humanCostPart").value = (
+            humanLaborCost / humanPartsYear
+          ).toFixed(2);
+          robotCostPart = document.getElementById("robotCostPart").value = (
+            robotLaborCost / robotPartsYear
+          ).toFixed(2);
+          // console.log(humanLaborCost / humanPartsYear)
+        }
+        laborCostPart();
+
+        function decreasedCostPerPart() {
+          decreasePartCost = document.getElementById(
+            "decreasePartCost"
+          ).value = (humanCostPart - robotCostPart).toFixed(2);
+          // console.log(humanCostPart - robotCostPart)
+        }
+        decreasedCostPerPart();
+
+        function theoreticalProfit() {
+          additionalTheoryProfit = document.getElementById(
+            "additionalTheoryProfit"
+          ).value = Math.round((robotPartsYear - humanPartsYear) * decreasePartCost);
+          // console.log((robotPartsYear - humanPartsYear) * decreasePartCost)
+        }
+        theoreticalProfit();
+
+        function monthadditionalProfit() {
+          additionalProfit = document.getElementById(
+            "additionalProfit"
+          ).value = (robotCell / (additionalTheoryProfit / 12)).toFixed(2)
+          // console.log(robotCell/ (additionalTheoryProfit/12))
+        }
+        monthadditionalProfit();
+
+        function partsIncrease() {
+          increasedPartsPerYear = document.getElementById(
+            "increasedPartsPerYear"
+          ).value = robotPartsYear - humanPartsYear;
+          // console.log(increasedPartsPerYear)
+        }
+        partsIncrease();
+
+        function productIncreasePercent() {
+          prodcutIncrease = document.getElementById("prodcutIncrease").value = (
+            increasedPartsPerYear / humanPartsYear
+          ).toFixed(2);
+          //    console.log(increasedPartsPerYear/ humanPartsYear)
+        }
+        productIncreasePercent();
+
+        function partDecreaseCost() {
+          partCostDecrease = document.getElementById(
+            "partCostDecrease"
+          ).value = (decreasePartCost / humanCostPart).toFixed(2);
+          // console.log(decreasePartCost / humanCostPart)
+        }
+        partDecreaseCost();
+
+        function partsPerHour() {
+          humanPartsHour = document.getElementById("humanPartsHour").value = (
+            (3600 / (humanCycle + humanLoad)) *
+            humanEfficiency
+          ).toFixed(2);
+          robotPartsHour = document.getElementById("robotPartsHour").value = (
+            (3600 / (robotCycle + robotLoad)) *
+            robotEfficiency
+          ).toFixed(2);
+
+          //   console.log((3600 / (humanCycle + humanLoad)) * humanEfficiency);
+        }
+        partsPerHour();
+      }
+      operationUpdate();
+    </script>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
